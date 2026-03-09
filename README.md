@@ -15,7 +15,7 @@ brew tap avchaykin/tap
 brew install --cask avchaykin/tap/screenshot-describer
 
 # formulas
-brew install --HEAD avchaykin/tap/liberte-graph-v2
+brew install avchaykin/tap/liberte-graph-v2
 ```
 
 ## CI
@@ -24,3 +24,5 @@ GitHub Actions workflow (`.github/workflows/ci.yml`) validates the tap on push/P
 - `brew audit --strict --tap avchaykin/tap`
 - builds and installs `liberte-graph-v2`
 - installs `screenshot-describer` cask
+
+Release sync workflow (`.github/workflows/update-liberte-graph-v2.yml`) checks hourly for a new `liberte-graph-v2` GitHub release and updates formula `url` + `sha256` automatically.
