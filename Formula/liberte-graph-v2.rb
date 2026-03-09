@@ -14,7 +14,7 @@ class LiberteGraphV2 < Formula
   depends_on "node" => :build
 
   def install
-    system "npm", "install", *std_npm_args
+    system "npm", "install", "--include=dev"
     system "npm", "run", "build"
 
     libexec.install "dist"
