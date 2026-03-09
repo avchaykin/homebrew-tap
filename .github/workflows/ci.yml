@@ -1,0 +1,33 @@
+name: tap-ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Tap local repository
+        run: brew tap avchaykin/tap "$GITHUB_WORKSPACE"
+
+      - name: Run brew style/audit
+        run: |
+          brew style --fix Casks/*.rb Formula/*.rb || true
+          brew audit --strict --tap avchaykin/tap
+
+      - name: Install and smoke-test formula
+        run: |
+          brew install --build-from-source avchaykin/tap/liberte-graph-v2 --HEAD
+          liberte-graph-v2 --help
+
+      - name: Install cask
+        run: brew install --cask avchaykin/tap/screenshot-describer

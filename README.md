@@ -14,6 +14,13 @@ brew tap avchaykin/tap
 # macOS apps (casks)
 brew install --cask avchaykin/tap/screenshot-describer
 
-# formulas example
-# brew install avchaykin/tap/<formula-name>
+# formulas
+brew install --HEAD avchaykin/tap/liberte-graph-v2
 ```
+
+## CI
+
+GitHub Actions workflow (`.github/workflows/ci.yml`) validates the tap on push/PR:
+- `brew audit --strict --tap avchaykin/tap`
+- builds and installs `liberte-graph-v2`
+- installs `screenshot-describer` cask
