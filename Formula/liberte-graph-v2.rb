@@ -6,15 +6,15 @@ class LiberteGraphV2 < Formula
   license "MIT"
   head "https://github.com/avchaykin/liberte-graph-v2.git", branch: "main"
 
-  depends_on "node" => :build
-
   livecheck do
     url :stable
     regex(/^v?(\d+(?:\.\d+)+)$/i)
   end
 
+  depends_on "node" => :build
+
   def install
-    system "npm", "install"
+    system "npm", "install", *std_npm_args
     system "npm", "run", "build"
 
     libexec.install "dist"
