@@ -16,18 +16,15 @@ jobs:
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
-      - name: Tap local repository
-        run: brew tap avchaykin/tap "$GITHUB_WORKSPACE"
-
-      - name: Run brew style/audit
+      - name: Run brew audit
         run: |
-          brew style --fix Casks/*.rb Formula/*.rb || true
-          brew audit --strict --tap avchaykin/tap
+          brew audit --strict Formula/liberte-graph-v2.rb
+          brew audit --cask --strict Casks/screenshot-describer.rb
 
       - name: Install and smoke-test formula
         run: |
-          brew install --build-from-source avchaykin/tap/liberte-graph-v2
+          brew install --build-from-source ./Formula/liberte-graph-v2.rb
           liberte-graph-v2 --help
 
       - name: Install cask
-        run: brew install --cask avchaykin/tap/screenshot-describer
+        run: brew install --cask ./Casks/screenshot-describer.rb

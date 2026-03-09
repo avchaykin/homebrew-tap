@@ -15,51 +15,41 @@ jobs:
       - name: Checkout tap
         uses: actions/checkout@v4
 
-      - name: Update formula from latest release
+      - name: Get latest release metadata
+        id: rel
         env:
-          REPO: avchaykin/liberte-graph-v2
-          FORMULA: Formula/liberte-graph-v2.rb
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-
-          TAG=$(gh release list --repo "$REPO" --limit 1 --json tagName --jq '.[0].tagName')
+          TAG=$(gh release list --repo avchaykin/liberte-graph-v2 --limit 1 --json tagName --jq '.[0].tagName')
           if [ -z "$TAG" ] || [ "$TAG" = "null" ]; then
-            echo "No releases found, exiting."
+            echo "has_release=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-
           URL="https://github.com/avchaykin/liberte-graph-v2/archive/refs/tags/${TAG}.tar.gz"
           SHA=$(curl -Ls "$URL" | sha256sum | awk '{print $1}')
+          echo "has_release=true" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
 
-          TAG="$TAG" URL="$URL" SHA="$SHA" python3 - <<'PY'
-import os
-import re
-from pathlib import Path
-
-formula = Path("Formula/liberte-graph-v2.rb")
-text = formula.read_text()
-
-tag = os.environ["TAG"].strip()
-url = os.environ["URL"].strip()
-sha = os.environ["SHA"].strip()
-
-text = re.sub(r'^\s*url\s+"[^"]+"\s*$', f'  url "{url}"', text, flags=re.M)
-text = re.sub(r'^\s*sha256\s+"[^"]+"\s*$', f'  sha256 "{sha}"', text, flags=re.M)
-
-formula.write_text(text)
-print(f"Updated {formula} -> {tag}")
-PY
+      - name: Update formula file
+        if: steps.rel.outputs.has_release == 'true'
+        run: |
+          set -euo pipefail
+          sed -i "s|^  url \".*\"$|  url \"${{ steps.rel.outputs.url }}\"|" Formula/liberte-graph-v2.rb
+          sed -i "s|^  sha256 \".*\"$|  sha256 \"${{ steps.rel.outputs.sha }}\"|" Formula/liberte-graph-v2.rb
 
       - name: Commit changes
+        if: steps.rel.outputs.has_release == 'true'
         run: |
           set -euo pipefail
           if git diff --quiet; then
             echo "No changes to commit."
             exit 0
           fi
-
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add Formula/liberte-graph-v2.rb
-          git commit -m "chore: bump liberte-graph-v2 formula"
+          git commit -m "chore: bump liberte-graph-v2 formula to ${{ steps.rel.outputs.tag }}"
           git push
