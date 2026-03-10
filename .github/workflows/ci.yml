@@ -25,7 +25,7 @@ jobs:
 
       - name: Install and smoke-test formulas
         run: |
-          brew install --build-from-source ./Formula/liberte-graph-v2.rb
+          brew install --build-from-source --formula avchaykin/tap/liberte-graph-v2
           liberte-graph-v2 --help
-          brew install --build-from-source ./Formula/screenshot-describer.rb
+          brew install --build-from-source --formula avchaykin/tap/screenshot-describer
           screenshot-describer --help || true
