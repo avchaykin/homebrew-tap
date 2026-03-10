@@ -11,11 +11,16 @@ brew tap avchaykin/tap
 ## Install packages
 
 ```bash
-# macOS apps (casks)
-brew install --cask avchaykin/tap/screenshot-describer
-
 # formulas
 brew install avchaykin/tap/liberte-graph-v2
+brew install avchaykin/tap/screenshot-describer
+```
+
+## Run as service
+
+```bash
+brew services start avchaykin/tap/screenshot-describer
+brew services list | grep screenshot-describer
 ```
 
 ## CI

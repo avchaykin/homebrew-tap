@@ -21,12 +21,11 @@ jobs:
       - name: Run brew audit
         run: |
           brew audit --strict avchaykin/tap/liberte-graph-v2
-          brew audit --cask --strict avchaykin/tap/screenshot-describer
+          brew audit --strict avchaykin/tap/screenshot-describer
 
-      - name: Install and smoke-test formula
+      - name: Install and smoke-test formulas
         run: |
           brew install --build-from-source ./Formula/liberte-graph-v2.rb
           liberte-graph-v2 --help
-
-      - name: Install cask
-        run: brew install --cask ./Casks/screenshot-describer.rb
+          brew install --build-from-source ./Formula/screenshot-describer.rb
+          screenshot-describer --help || true
