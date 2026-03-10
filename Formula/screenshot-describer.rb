@@ -12,7 +12,7 @@ class ScreenshotDescriber < Formula
     # Work around sandbox-exec failures seen on some macOS setups during SwiftPM manifest evaluation.
     ENV["SWIFTPM_DISABLE_SANDBOX"] = "1"
 
-    system "swift", "build", "-c", "release"
+    system "swift", "build", "--disable-sandbox", "-c", "release"
     bin.install ".build/release/screenshot-describer"
   end
 
