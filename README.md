@@ -1,4 +1,4 @@
-# avchaykin/homebrew-tap
+# avchaykin/tap
 
 Homebrew tap for personal projects.
 
