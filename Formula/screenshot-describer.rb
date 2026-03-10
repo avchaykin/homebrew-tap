@@ -21,6 +21,6 @@ class ScreenshotDescriber < Formula
   end
 
   test do
-    assert_predicate bin/"screenshot-describer", :exist?
+    assert_path_exists bin/"screenshot-describer"
   end
 end
