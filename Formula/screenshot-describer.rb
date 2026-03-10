@@ -1,8 +1,8 @@
 class ScreenshotDescriber < Formula
   desc "Menubar service that watches a folder and processes new files"
   homepage "https://github.com/avchaykin/screenshot-describer"
-  url "https://github.com/avchaykin/screenshot-describer/archive/refs/tags/v0.1.13.tar.gz"
-  sha256 "493c79f7565e4925f1bc162169c2cd0f70f422099ad56c9326c99877b4c0c49f"
+  url "https://github.com/avchaykin/screenshot-describer/archive/refs/tags/v0.1.14.tar.gz"
+  sha256 "7a9b84f8e570ff4a89d5e29b88026e52c5a04b1c10bdf567783a496a8270bab4"
   license "MIT"
   head "https://github.com/avchaykin/screenshot-describer.git", branch: "main"
 
