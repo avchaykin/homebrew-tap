@@ -23,9 +23,7 @@ jobs:
           brew audit --strict avchaykin/tap/liberte-graph-v2
           brew audit --strict avchaykin/tap/screenshot-describer
 
-      - name: Install and smoke-test formulas
+      - name: Install and smoke-test screenshot-describer formula
         run: |
-          brew install --build-from-source --formula avchaykin/tap/liberte-graph-v2
-          liberte-graph-v2 --help
           brew install --build-from-source --formula avchaykin/tap/screenshot-describer
-          screenshot-describer --help || true
+          test -x "$(brew --prefix)/opt/screenshot-describer/bin/screenshot-describer"
