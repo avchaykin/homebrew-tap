@@ -1,8 +1,8 @@
 class LiberteGraphV2 < Formula
   desc "Liberte Graph visual home schematic editor"
   homepage "https://github.com/avchaykin/liberte-graph-v2"
-  url "https://github.com/avchaykin/liberte-graph-v2/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "ba1ff352400c0cf9fbd8e566beeb087c2ea3f06c3c7b2864ad1ada3e6c6f16f1"
+  url "https://github.com/avchaykin/liberte-graph-v2/archive/refs/tags/v0.2.0.tar.gz"
+  sha256 "b044a444e5db73f1980facbdb14028df59b69ea2a35f34356f8a4a5eec687005"
   license "MIT"
   head "https://github.com/avchaykin/liberte-graph-v2.git", branch: "main"
 
