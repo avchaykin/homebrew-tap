@@ -1,0 +1,55 @@
+name: update-screenshot-describer
+
+on:
+  schedule:
+    - cron: "37 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-formula:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tap
+        uses: actions/checkout@v4
+
+      - name: Get latest release metadata
+        id: rel
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          TAG=$(gh release list --repo avchaykin/screenshot-describer --limit 1 --json tagName --jq '.[0].tagName')
+          if [ -z "$TAG" ] || [ "$TAG" = "null" ]; then
+            echo "has_release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          URL="https://github.com/avchaykin/screenshot-describer/archive/refs/tags/${TAG}.tar.gz"
+          SHA=$(curl -Ls "$URL" | sha256sum | awk '{print $1}')
+          echo "has_release=true" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Update formula file
+        if: steps.rel.outputs.has_release == 'true'
+        run: |
+          set -euo pipefail
+          sed -i "s|^  url \".*\"$|  url \"${{ steps.rel.outputs.url }}\"|" Formula/screenshot-describer.rb
+          sed -i "s|^  sha256 \".*\"$|  sha256 \"${{ steps.rel.outputs.sha }}\"|" Formula/screenshot-describer.rb
+
+      - name: Commit changes
+        if: steps.rel.outputs.has_release == 'true'
+        run: |
+          set -euo pipefail
+          if git diff --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Formula/screenshot-describer.rb
+          git commit -m "chore: bump screenshot-describer formula to ${{ steps.rel.outputs.tag }}"
+          git push

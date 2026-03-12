@@ -30,4 +30,6 @@ GitHub Actions workflow (`.github/workflows/ci.yml`) validates the tap on push/P
 - builds and installs `liberte-graph-v2`
 - installs `screenshot-describer` cask
 
-Release sync workflow (`.github/workflows/update-liberte-graph-v2.yml`) checks hourly for a new `liberte-graph-v2` GitHub release and updates formula `url` + `sha256` automatically.
+Release sync workflows check hourly for new GitHub releases and update formula `url` + `sha256` automatically:
+- `.github/workflows/update-liberte-graph-v2.yml`
+- `.github/workflows/update-screenshot-describer.yml`
